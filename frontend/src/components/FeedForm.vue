@@ -17,6 +17,15 @@
                 <input type="file" ref="file" @change="onFileChange">
                 Attach image
             </label>
+            <div class="flex space-x-4">
+            <label class="inline-block">
+                <img src="path/to/image-icon.png" class="w-8 h-8 cursor-pointer" />
+                <input type="file" ref="file" @change="onFileChange" class="hidden">
+            </label>
+            <img src="path/to/gif-icon.png" class="w-8 h-8 cursor-pointer" />
+            <img src="path/to/emoji-icon.png" class="w-8 h-8 cursor-pointer" />
+            <img src="path/to/poll-icon.png" class="w-8 h-8 cursor-pointer" />
+        </div>
 
             <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
         </div>

@@ -3,6 +3,6 @@
 
 <template>
   <main>
-    <h1>Wlcome</h1>
+    <h1>Welcome</h1>
   </main>
 </template>

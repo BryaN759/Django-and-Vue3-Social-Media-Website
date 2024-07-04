@@ -60,9 +60,8 @@ def friends(request, pk):
 
 
 
-
 @api_view(['POST'])
-def send_friend_request(request, pk):
+def send_friendship_request(request, pk):
     user = User.objects.get(pk=pk)
 
     check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)

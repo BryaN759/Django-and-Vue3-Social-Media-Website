@@ -1,23 +1,33 @@
 <template>
-    <main class="px-8 py-6 bg-gray-100">
+    <main class="px-8 py-6 bg-gray-800">
             <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
                 <div class="main-left col-span-1">
-                    <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-                        <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                    <div class="p-4 bg-gray-600 border border-gray-800 text-center rounded-lg">
+                        <img src="https://www.w3schools.com/howto/img_avatar.png" class="mb-6 mt-8 rounded-full w-48 h-48 mx-auto">
                         
-                        <p><strong>{{user.name}}</strong></p>
+                        <p class="text-gray-200"><strong>{{user.name}}</strong></p>
 
                         <div class="mt-6 flex space-x-8 justify-around">
-                            <RouterLink :to="{name: 'friends', params: {id: user.id}}" class="text-xs text-gray-500">{{ user.friends_count }} friends</RouterLink>
-                            <p class="text-xs text-gray-500">120 posts</p>
+                            <RouterLink :to="{name: 'friends', params: {id: user.id}}" class="text-xs text-gray-200">{{ user.friends_count }} friends</RouterLink>
+                            <p class="text-xs text-gray-200">120 posts</p>
                         </div>
 
-                        <div class="mt-6">
-                            <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
-                            @click="sendFriendRequest"
-                            v-if="userStore.user.id !== user.id"
-                            >Send request</button>
-                            <button class="inline-block py-4 px-6 bg-red-600 text-white rounded-lg"
+                        <div class="mt-6 mb-4">
+                            <button class="inline-block py-4 px-3 bg-black text-xs text-gray-200 rounded-lg"
+                                @click="sendFriendRequest"
+                                v-if="userStore.user.id !== user.id"
+                            >
+                                Send request
+                            </button>
+                            <button 
+                                class="inline-block ml-4 py-4 px-3 bg-black text-xs text-gray-200 rounded-lg" 
+                                @click="sendDirectMessage"
+                                v-if="userStore.user.id !== user.id"
+                            >
+                                Message
+                            </button>
+
+                            <button class="inline-block py-4 px-6 bg-black border border-red-500 text-red-500 rounded-lg"
                             @click="logout"
                             v-if="userStore.user.id === user.id"
                             >Log out</button>
@@ -27,24 +37,32 @@
 
                 <div class="main-center col-span-2 space-y-4">
                     <div 
-                    class="bg-white border border-gray-200 rounded-lg"
+                    class="bg-gray-600 border border-gray-800 rounded-lg"
                         v-if="userStore.user.id === user.id"
                     >
                         <form v-on:submit.prevent="submitForm" method="post">
                         <div class="p-4">  
-                            <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you thinking about?"></textarea>
+                            <textarea v-model="body" class="p-4 w-full bg-gray-500 rounded-lg" placeholder="What are you thinking about?"></textarea>
                         </div>
 
-                        <div class="p-4 border-t border-gray-100 flex justify-between">
-                            <a href="#" class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach image</a>
+                        <div class="p-4 border-t border-gray-500 flex justify-between">
+                            <div class="flex space-x-4 mt-3">
+                                <label class="inline-block">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" class="w-8 h-8 cursor-pointer" />
+                                    <input type="file" ref="file" @change="onFileChange" class="hidden">
+                                </label>
+                                <img src="https://cdn-icons-png.flaticon.com/128/739/739272.png" class="w-8 h-8 cursor-pointer" />
+                                <img src="https://cdn-icons-png.flaticon.com/128/158/158420.png" class="w-8 h-8 cursor-pointer" />
+                                <img src="https://cdn-icons-png.flaticon.com/128/7349/7349652.png" class="w-8 h-8 cursor-pointer" />
+                            </div>
 
-                            <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-3xl">Post</button>
+                            <button class="inline-block py-4 px-6 bg-black text-gray-200 rounded-3xl">Post</button>
                         </div>
                     </form>
                     </div>
 
                     <div 
-                        class="p-4 bg-white border border-gray-200 rounded-lg"
+                        class="p-4 bg-gray-600 border border-gray-800 rounded-lg"
                         v-for="post in posts"
                         v-bind:key="post.id"
                     >
@@ -113,6 +131,21 @@ export default {
     },
 
     methods: {
+        sendDirectMessage() {
+            console.log('sendDirectMessage')
+
+            axios
+                .get(`/api/chat/${this.$route.params.id}/get-or-create/`)
+                .then(response => {
+                    console.log(response.data)
+
+                    this.$router.push('/chat')
+                })
+                .catch(error => {
+                    console.log('error', error)
+                })
+        },
+
         sendFriendRequest() {
             axios
                 .post(`/api/friends/${this.$route.params.id}/request/`)
