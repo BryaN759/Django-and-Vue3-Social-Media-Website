@@ -85,7 +85,7 @@ export default {
                 .then(response => {
                     console.log('data', response.data)
 
-                    this.posts.unshift(response.data)
+                    this.posts.unshift(response.data.posts)
                     this.body = ''
                 })
                 .catch(error => {

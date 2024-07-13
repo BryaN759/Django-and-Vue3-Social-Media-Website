@@ -22,7 +22,7 @@
                             v-for="user in users"
                             v-bind:key="user.id"
                         >
-                            <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full w-40 h-40 mx-auto">
+                            <img :src="user.get_avatar" class="mb-6 rounded-full w-40 h-40 mx-auto">
                         
                             <p class="text-gray-200">
                                 <strong>
@@ -33,7 +33,7 @@
 
                             <div class="mt-6 flex space-x-8 justify-around">
                                 <p class="text-xs text-gray-400">{{ user.friends_count }} friends</p>
-                                <p class="text-xs text-gray-400">120 posts</p>
+                                <p class="text-xs text-gray-400"> posts</p>
                             </div>
                         </div>
                     </div>

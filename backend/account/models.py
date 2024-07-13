@@ -57,9 +57,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_avatar(self):
         if self.avatar:
-            return settings.WEBSITE_URL + self.avatar.url
+            # return settings.WEBSITE_URL + self.avatar.url
+            return 'http://127.0.0.1:8000' + self.avatar.url
         else:
-            return 'https://picsum.photos/200/200'
+            # return 'https://picsum.photos/200/200'
+            return ''
         
     
 class FriendshipRequest(models.Model):

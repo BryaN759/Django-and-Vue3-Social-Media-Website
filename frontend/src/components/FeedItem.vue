@@ -2,9 +2,9 @@
     
     <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center space-x-6">
-            <img src="https://www.w3schools.com/howto/img_avatar.png" class="w-[40px] rounded-full">
+            <img :src="post.created_by.get_avatar" class="w-[40px] rounded-full">
             
-            <p class="text-white">
+            <p class="text-gray-200">
                 <strong>
                     <RouterLink :to="{name: 'profile', params:{'id': post.created_by.id}}">{{ post.created_by.name }}</RouterLink>
                 </strong>
@@ -14,7 +14,7 @@
         <p class="text-gray-400 text-xs">{{ post.created_at_formated }} ago</p>
     </div>
 
-    <p class="text-white">
+    <p class="text-gray-200">
         {{ post.body }}
     </p>
 

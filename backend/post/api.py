@@ -5,8 +5,8 @@ from account.models import User
 from account.serializers import UserSerializer
 
 from .forms import PostForm
-from .models import Post, Like, Comment
-from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
+from .models import Post, Like, Comment, Trend
+from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer, TrendSerializer
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 # Create your views here.
@@ -20,6 +20,11 @@ def post_list(request):             # need to change later with friends post
         user_ids.append(user.id)
 
     posts = Post.objects.filter(created_by_id__in=list(user_ids))
+
+    trend = request.GET.get('trend', '')
+
+    if trend:
+        posts = posts.filter(body__icontains='#' + trend) #.filter(is_private=False)
 
     serializer = PostSerializer(posts, many=True)
 
@@ -65,9 +70,15 @@ def post_create(request):
         post.created_by = request.user
         post.save()
 
-        serializer = PostSerializer(post)
+        user = request.user
+        user.posts_count += 1
+        user.save()
 
-        return JsonResponse(serializer.data, safe=False)
+        post_serializer = PostSerializer(post)
+        user_serializer = UserSerializer(user)
+
+        return JsonResponse({'posts': post_serializer.data,
+                             'user': user_serializer.data}, safe=False)
     else:
         return JsonResponse({'error': 'later add'})
     
@@ -108,3 +119,9 @@ def post_create_comment(request, pk):
 
     return JsonResponse(serializer.data, safe=False)
 
+
+@api_view(['GET'])
+def get_trends(request):
+    serializer = TrendSerializer(Trend.objects.all(), many=True)
+
+    return JsonResponse(serializer.data, safe=False)
